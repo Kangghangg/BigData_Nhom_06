@@ -1,4 +1,3 @@
-# Bỏ qua dữ liệu thô và file nén
 *.csv
 *.json
 *.parquet
@@ -6,10 +5,10 @@
 *.rar
 *.zip
 data/
-
-# Bỏ qua môi trường ảo và file rác hệ thống
 .venv/
 venv/
+env/
 __pycache__/
 .DS_Store
 .vscode/
+.idea/
