@@ -43,14 +43,14 @@
 
 ## 3. BẢNG PHÂN CÔNG NHIỆM VỤ 6 THÀNH VIÊN (PIPELINE MATRIX)
 
-|  STT  | Vai trò          | Nhiệm vụ kỹ thuật chính                                                                                                                          | Sản phẩm bàn giao                                     |
-| :---: | :--------------- | :----------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------- |
-| **1** | **Thành viên 1** | Tiền xử lý dữ liệu sa mạc (lọc null, loại bỏ `SurveyCode` & `GeologyIndex`, giữ \\(0 \le \text{NDVI} \le 1\\)) và Tính toán cấu hình HDFS Block. | File `src/01_data_ingestion.py` & Báo cáo HDFS.       |
-| **2** | **Thành viên 2** | Lập trình PySpark RDD/DataFrame tính mật độ thực vật trung bình, tối ưu bộ nhớ `.persist()` và phân vùng `.partitionBy()`.                       | File `src/02_pyspark_density.py` & Spark DataFrame.   |
-| **3** | **Thành viên 3** | Khai phá đồ thị liên kết không gian (PageRank \\(d=0.85\\), HITS L2 Norm) và Phân cụm sa mạc bằng K-Means (PySpark MLlib).                       | File `src/03_graph_clustering.py` & Kết quả phân cụm. |
-| **4** | **Thành viên 4** | Thực nghiệm đo hiệu năng song song trên \\(p = 1, 2, 4, 8\\) cores, tính Amdahl, Gustafson, Karp-Flatt Metric và vẽ biểu đồ Matplotlib.          | File `src/04_benchmark.py` & Biểu đồ PNG.             |
-| **5** | **Thành viên 5** | Chuẩn hóa mã nguồn tích hợp End-to-End (`main.py`) và Biên soạn toàn văn Báo cáo Word tổng hợp.                                                  | File `src/main.py` & File `docs/BaoCao_BigData.docx`. |
-| **6** | **Thành viên 6** | Thiết kế Slide thuyết trình PowerPoint, xây dựng kịch bản báo cáo 6 người, lọc bỏ data thô và Đóng gói file `Nhóm_06.rar`.                       | File `presentation/Nhóm_06.pptx` & `Nhóm_06.rar`.     |
+|  STT  | Vai trò                    | Nhiệm vụ kỹ thuật chính                                                                                                                          | Sản phẩm bàn giao                                     |
+| :---: | :------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------- |
+| **1** | **Lê Dư Bảo Khang**        | Tiền xử lý dữ liệu sa mạc (lọc null, loại bỏ `SurveyCode` & `GeologyIndex`, giữ \\(0 \le \text{NDVI} \le 1\\)) và Tính toán cấu hình HDFS Block. | File `src/01_data_ingestion.py` & Báo cáo HDFS.       |
+| **2** | **Nguyễn Dương Thục Uyên** | Lập trình PySpark RDD/DataFrame tính mật độ thực vật trung bình, tối ưu bộ nhớ `.persist()` và phân vùng `.partitionBy()`.                       | File `src/02_pyspark_density.py` & Spark DataFrame.   |
+| **3** | **Hồ Ngọc Quý**            | Khai phá đồ thị liên kết không gian (PageRank \\(d=0.85\\), HITS L2 Norm) và Phân cụm sa mạc bằng K-Means (PySpark MLlib).                       | File `src/03_graph_clustering.py` & Kết quả phân cụm. |
+| **4** | **Trần Nhã Phương**        | Thực nghiệm đo hiệu năng song song trên \\(p = 1, 2, 4, 8\\) cores, tính Amdahl, Gustafson, Karp-Flatt Metric và vẽ biểu đồ Matplotlib.          | File `src/04_benchmark.py` & Biểu đồ PNG.             |
+| **5** | **Nguyễn Thái Bảo**        | Chuẩn hóa mã nguồn tích hợp End-to-End (`main.py`) và Biên soạn toàn văn Báo cáo Word tổng hợp.                                                  | File `src/main.py` & File `docs/BaoCao_BigData.docx`. |
+| **6** | **Trần Ngô Trọng Trường**  | Thiết kế Slide thuyết trình PowerPoint, xây dựng kịch bản báo cáo 6 người, lọc bỏ data thô và Đóng gói file `Nhóm_06.rar`.                       | File `presentation/Nhóm_06.pptx` & `Nhóm_06.rar`.     |
 
 ---
 
