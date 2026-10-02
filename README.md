@@ -31,13 +31,34 @@
 
 ## 2. NGUYÊN LÝ KỸ THUẬT VÀ QUY ƯỚC MÔN HỌC (HUIT)
 
-- **Lưu trữ HDFS Storage (TV1):** Tính toán số lượng HDFS Block bằng công thức \\(\text{Block Count} = \left\lceil \frac{\text{Dung lượng file}}{\text{Block Size (128 MB)}} \right\rceil\\). Thiết lập hệ số nhân bản Replication Factor \\(k = 3\\), tính tổng dung lượng vật lý toàn cụm \\(\text{Total Storage} = \text{Block Count} \times 128\text{ MB} \times 3\\).
-- **Xử lý Song song PySpark & Tối ưu RAM (TV2):** Tính mật độ thực vật trung bình theo vùng và độ ẩm đất. Sử dụng `.persist()` lưu bộ nhớ RAM và `.partitionBy("Region")` giảm chi phí tráo đổi dữ liệu qua mạng (shuffling).
+- **Lưu trữ HDFS Storage (TV1):**
+  - Công thức tính số lượng HDFS Block:
+    \\[\text{Block Count} = \left\lceil \frac{\text{Dung lượng file}}{\text{Block Size (128 MB)}} \right\rceil\\]
+  - Công thức tính tổng dung lượng thực tế lưu trên cụm khi có hệ số nhân bản \\(k = 3\\):
+    \\[\text{Total Storage} = \text{Block Count} \times 128\text{ MB} \times k\\]
+
+- **Xử lý Song song PySpark & Tối ưu RAM (TV2):**
+  - Tính mật độ thực vật trung bình theo vùng (`Region`) và độ ẩm đất (`SoilMoisture`).
+  - Sử dụng `.persist()` để lưu kết quả tạm thời trên RAM và `.partitionBy("Region")` để giảm thiểu chi phí tráo đổi dữ liệu qua mạng (Network Shuffling).
+
 - **Khai phá Đồ thị & Phân cụm Sinh thái (TV3):**
-  - **PageRank:** Áp dụng công thức Brin & Page (1998) với \\(d = 0.85\\), \\(PR(A) = (1-d) + d \sum \frac{PR(T_i)}{C(T_i)}\\) (theo quy ước HUIT: không chia \\(1-d\\) cho \\(N\\)).
-  - **HITS Algorithm:** Tính điểm Authority và Hub, thực hiện chuẩn hóa **L2 Norm** sau mỗi vòng lặp.
+  - **PageRank Algorithm:** Áp dụng công thức Brin & Page (1998) với hệ số \\(d = 0.85\\):
+    \\[PR(A) = (1 - d) + d \sum_{i} \frac{PR(T_i)}{C(T_i)}\\]
+    _(Theo quy ước HUIT: không chia phần \\((1-d)\\) cho tổng số đỉnh \\(N\\))._
+  - **HITS Algorithm:** Tính điểm Authority và Hub, thực hiện chuẩn hóa **L2 Norm** sau mỗi vòng lặp:
+    \\[\|x\|_2 = \sqrt{\sum x_i^2}\\]
   - **K-Means Clustering:** Phân cụm các vùng sa mạc thành 3 nhóm sinh thái dựa trên bộ đặc trưng môi trường.
-- **Đánh giá Hiệu năng Tính toán Song song (TV4):** Thực nghiệm đo thời gian \\(T(p)\\) trên \\(p = 1, 2, 4, 8\\) cores. Phân tích Tốc độ tăng tốc \\(S(p)\\), Hiệu suất \\(E(p)\\), Định luật Amdahl, Định luật Gustafson và chỉ số Karp-Flatt Metric \\(e = \frac{1/S - 1/p}{1 - 1/p}\\).
+
+- **Đánh giá Hiệu năng Tính toán Song song (TV4):**
+  - Thực nghiệm đo thời gian \\(T(p)\\) trên các cấu hình \\(p = 1, 2, 4, 8\\) cores.
+  - **Tốc độ tăng tốc (Speedup):** \\(S(p) = \frac{T(1)}{T(p)}\\)
+  - **Hiệu suất (Efficiency):** \\(E(p) = \frac{S(p)}{p}\\)
+  - **Định luật Amdahl (Khối lượng công việc cố định):**
+    \\[S(p) = \frac{1}{(1-f) + \frac{f}{p}}\\]
+  - **Định luật Gustafson (Mở rộng quy mô bài toán):**
+    \\[S(p) = p - (1-f)(p-1)\\]
+  - **Chỉ số Karp-Flatt Metric (Đo lường chi phí giao tiếp & phần tuần tự):**
+    \\[e = \frac{\frac{1}{S(p)} - \frac{1}{p}}{1 - \frac{1}{p}}\\]
 
 ---
 
@@ -58,19 +79,16 @@
 
 ```text
 BigData_Project/
-├── .gitignore                  # Cấu hình chặn upload dữ liệu thô (.csv, .rar, .venv)
-├── README.md                   # Tài liệu hướng dẫn dự án (File này)
-├── requirements.txt            # Danh sách thư viện Python (pyspark, pandas, numpy, matplotlib)
-├── 10_desert_vegetation_density.csv # Tập dữ liệu thô thực tế (Chỉ lưu ở local)
-├── docs/                       # Thư mục lưu trữ tài liệu báo cáo & workflow
-│   ├── BaoCao_BigData.docx     # Báo cáo tổng hợp toàn văn
-│   └── desert_vegetation_density_workflow_v3.docx # Tài liệu Workflow chi tiết
-├── presentation/               # Thư mục lưu trữ slide thuyết trình
-│   └── Nhóm_06.pptx            # Slide báo cáo báo vệ môn học
-└── src/                        # Thư mục chứa mã nguồn Python
-    ├── 01_data_ingestion.py    # TV1: Tiền xử lý dữ liệu & HDFS Storage Calculation
-    ├── 02_pyspark_density.py   # TV2: PySpark Density Pipeline & Memory Persist
-    ├── 03_graph_clustering.py  # TV3: PageRank, HITS & K-Means Clustering
-    ├── 04_benchmark.py         # TV4: Benchmarking (Amdahl, Gustafson, Karp-Flatt)
-    └── main.py                 # TV5: Main Integrated End-to-End Pipeline
+├── .gitignore
+├── README.md
+├── requirements.txt
+├── 10_desert_vegetation_density.csv
+├── presentation/
+│   └── Nhóm_06.pptx
+└── src/
+    ├── 01_data_ingestion.py
+    ├── 02_pyspark_density.py
+    ├── 03_graph_clustering.py
+    ├── 04_benchmark.py
+    └── main.py
 ```
