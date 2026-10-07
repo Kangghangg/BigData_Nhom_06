@@ -13,3 +13,4 @@ __pycache__/
 .vscode/
 .idea/
 !requirements.txt
+!docs/benchmark/benchmark_table.csv
